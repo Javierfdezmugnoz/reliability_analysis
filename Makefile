@@ -1,8 +1,8 @@
 GPU=1
 CUDNN=0
 CUDNN_HALF=0
-OPENCV=0
-AVX=0
+OPENCV=1
+AVX=1
 OPENMP=0
 LIBSO=0
 ZED_CAMERA=0 # ZED SDK 3.0 and above
@@ -61,7 +61,7 @@ CC=gcc
 endif
 
 CPP=g++ -std=c++11
-NVCC=/Soft/cuda/11.1/bin/nvcc
+NVCC=/usr/local/cuda/bin/nvcc
 OPTS=-Ofast
 LDFLAGS= -lm -pthread
 COMMON= -Iinclude/ -I3rdparty/stb/include
@@ -97,12 +97,12 @@ LDFLAGS+= -lgomp
 endif
 
 ifeq ($(GPU), 1)
-COMMON+= -DGPU -I/Soft/cuda/11.1/targets/x86_64-linux/include/
+COMMON+= -DGPU -I/usr/local/cuda/targets/x86_64-linux/include
 CFLAGS+= -DGPU
 ifeq ($(OS),Darwin) #MAC
 LDFLAGS+= -L/usr/local/cuda/lib -lcuda -lcudart -lcublas -lcurand
 else
-LDFLAGS+= -L/Soft/cuda/11.1/targets/x86_64-linux/lib/ -lcuda -lcudart -lcublas -lcurand
+LDFLAGS+= -L/usr/local/cuda/targets/x86_64-linux/lib -lcuda -lcudart -lcublas -lcurand
 endif
 endif
 

@@ -452,7 +452,7 @@ void draw_detections_v3_aux(image im, detection *dets, int num, float thresh, ch
     memmove(input, input+20, strlen(input));
     // The following line remove the .jpg string from input
     input[16]='\0';
-    printf("%s\n",input);
+    // printf("%s\n",input);
 
     snprintf(str_file_name, 100,"results/%d/%d_%s.csv",slurm_index,imag_iteration_number,input);
 
@@ -460,7 +460,7 @@ void draw_detections_v3_aux(image im, detection *dets, int num, float thresh, ch
     {
         fprintf(stderr, "cannot open file '%s'\n", str_file_name);
     }
-    printf("%s\n", str_file_name);
+    // printf("%s\n", str_file_name);
     // ==================================================================
 
 
@@ -472,6 +472,7 @@ void draw_detections_v3_aux(image im, detection *dets, int num, float thresh, ch
 
     // text output
     qsort(selected_detections, selected_detections_num, sizeof(*selected_detections), compare_by_lefts);
+    printf("\n\n\nNUM_SELECTED_DETECTION:%d\n\n\n",selected_detections_num);
     int i;
     fprintf(p_file, "Class,accuracy(%%),left_x,top_y,width,height\n");
     for (i = 0; i < selected_detections_num; ++i) {
@@ -480,45 +481,46 @@ void draw_detections_v3_aux(image im, detection *dets, int num, float thresh, ch
         fprintf(p_file,"%s_%i,%.0f,", names[best_class],i, selected_detections[i].det.prob[best_class] * 100);
         if (ext_output){
             fprintf(p_file,"%4.0f,%4.0f,%4.0f,%4.0f\n",
-                round((selected_detections[i].det.bbox.x - selected_detections[i].det.bbox.w / 2)*im.w),
-                round((selected_detections[i].det.bbox.y - selected_detections[i].det.bbox.h / 2)*im.h),
-                round(selected_detections[i].det.bbox.w*im.w), round(selected_detections[i].det.bbox.h*im.h));
+                    round((selected_detections[i].det.bbox.x - selected_detections[i].det.bbox.w / 2)*im.w),
+                    round((selected_detections[i].det.bbox.y - selected_detections[i].det.bbox.h / 2)*im.h),
+                    round(selected_detections[i].det.bbox.w*im.w), round(selected_detections[i].det.bbox.h*im.h));
             /*printf("\t(left_x: %4.0f   top_y: %4.0f   width: %4.0f   height: %4.0f)\n",
                 round((selected_detections[i].det.bbox.x - selected_detections[i].det.bbox.w / 2)*im.w),
                 round((selected_detections[i].det.bbox.y - selected_detections[i].det.bbox.h / 2)*im.h),
                 round(selected_detections[i].det.bbox.w*im.w), round(selected_detections[i].det.bbox.h*im.h));*/
         }
-        else
-            printf("\n");
+        // else
+            // printf("\n");
         int j;
         for (j = 0; j < classes; ++j) {
             if (selected_detections[i].det.prob[j] > thresh && j != best_class) {
-                printf("%s: %.0f%%", names[j], selected_detections[i].det.prob[j] * 100);
-
-                if (ext_output)
-                    printf("\t(left_x: %4.0f   top_y: %4.0f   width: %4.0f   height: %4.0f)\n",
-                        round((selected_detections[i].det.bbox.x - selected_detections[i].det.bbox.w / 2)*im.w),
-                        round((selected_detections[i].det.bbox.y - selected_detections[i].det.bbox.h / 2)*im.h),
-                        round(selected_detections[i].det.bbox.w*im.w), round(selected_detections[i].det.bbox.h*im.h));
-                else
-                    printf("\n");
+                // printf("%s: %.0f%%", names[j], selected_detections[i].det.prob[j] * 100);
+                // fprintf(p_file,"%s_%i,%.0f,", names[best_class],i, selected_detections[i].det.prob[best_class] * 100);
+                // if (ext_output)
+                    //
+                    // printf("\t(left_x: %4.0f   top_y: %4.0f   width: %4.0f   height: %4.0f)\n",
+                    //     round((selected_detections[i].det.bbox.x - selected_detections[i].det.bbox.w / 2)*im.w),
+                    //     round((selected_detections[i].det.bbox.y - selected_detections[i].det.bbox.h / 2)*im.h),
+                    //     round(selected_detections[i].det.bbox.w*im.w), round(selected_detections[i].det.bbox.h*im.h));
+                // else
+                    // printf("\n");
             }
         }
     }
 
     // image output
     qsort(selected_detections, selected_detections_num, sizeof(*selected_detections), compare_by_probs);
-    for (i = 0; i < selected_detections_num; ++i) {
+    /* for (i = 0; i < selected_detections_num; ++i) {
             int width = im.h * .002;
             if (width < 1)
                 width = 1;
 
-            /*
-            if(0){
-            width = pow(prob, 1./2.)*10+1;
-            alphabet = 0;
-            }
-            */
+            
+            //if(0){
+            //width = pow(prob, 1./2.)*10+1;
+            //alphabet = 0;
+            //}
+            //
 
             //printf("%d %s: %.0f%%\n", i, names[selected_detections[i].best_class], prob*100);
             int offset = selected_detections[i].best_class * 123457 % classes;
@@ -596,8 +598,8 @@ void draw_detections_v3_aux(image im, detection *dets, int num, float thresh, ch
                 free_image(mask);
                 free_image(resized_mask);
                 free_image(tmask);
-            }
-    }
+            } 
+    }*/
     free(selected_detections);
     imag_iteration_number++;
     fclose(p_file);
